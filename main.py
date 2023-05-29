@@ -1,6 +1,5 @@
 #Pozo, Mariano Leonel
 import re
-import csv
 import json
 
 with open('C:\\Users\\Inoue\\Desktop\\carpet\\Programacion_I\\Parcial\\dt.json') as archivo:
@@ -28,12 +27,10 @@ def ingresar_opcion(opciones: list)-> str:
 
 
 
-print(lista_nba[-1])
 
 
 
 
 
-'''print (type (data_nba))
-print (data_nba)'''
+
 
