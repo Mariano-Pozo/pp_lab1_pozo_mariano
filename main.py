@@ -1,4 +1,4 @@
-#Pozo, Mariano Leonel
+#Pozo, Mariano Leonel , div H
 import re
 import json
 import os
@@ -136,6 +136,21 @@ def ordenar_por_clave(lista: list, clave: str, flag_orden: bool) -> list:
     return lista_nueva
 
 def calular_promedio(jugadores:list, primera_clave:str, segunda_clave:str)-> float:
+    """
+    Esta función calcula el promedio de un valor específico en una lista de diccionarios.
+    
+    :param jugadores: una lista de diccionarios que representan a los jugadores y sus estadísticas
+    :type jugadores: list
+    :param primera_clave: La primera clave para acceder al diccionario dentro de la información de cada
+    jugador
+    :type primera_clave: str
+    :param segunda_clave: La segunda clave o atributo del diccionario anidado dentro del diccionario de
+    cada jugador que contiene el valor que se usará para calcular el promedio
+    :type segunda_clave: str
+    :return: un valor flotante, que es el promedio de un valor específico (determinado por la segunda
+    clave) en una lista de diccionarios (determinado por la primera clave). Si la lista está vacía,
+    devuelve Ninguno.
+    """
     if jugadores:
         acumulador = 0
         contador = 0
@@ -148,6 +163,14 @@ def calular_promedio(jugadores:list, primera_clave:str, segunda_clave:str)-> flo
     return None
 
 def calcular_imprimir_ordenardenados_alfabeticamente_promedio(lista_jugadores):
+    """
+    Esta función calcula e imprime los puntos promedio por juego para una lista de jugadores y luego
+    imprime los nombres de los jugadores y sus puntos promedio individuales por juego en orden
+    alfabético.
+    
+    :param lista_jugadores: una lista de diccionarios, donde cada diccionario representa a un jugador y
+    contiene su nombre y estadísticas
+    """
 
 
     lista_ordenada = ordenar_por_clave(lista_jugadores, "nombre", True)
@@ -163,6 +186,15 @@ def calcular_imprimir_ordenardenados_alfabeticamente_promedio(lista_jugadores):
 # 6 - Permitir al usuario ingresar el nombre de un jugador y mostrar si ese jugador
 # es miembro del Salón de la Fama del Baloncesto.
 def imprimir_key_jugador(jugador_encontrado:dict):
+    """
+    Esta función toma un diccionario que representa a un jugador de baloncesto, comprueba si es miembro
+    del Salón de la Fama del Baloncesto e imprime un mensaje que indica si es miembro o no.
+    
+    :param jugador_encontrado: Un diccionario que contiene información sobre un jugador de baloncesto,
+    incluido su nombre y logros
+    :type jugador_encontrado: dict
+    """
+    
     mensaje = "Error jugador no encontrado"
     
     if jugador_encontrado is not None:
@@ -176,32 +208,39 @@ def imprimir_key_jugador(jugador_encontrado:dict):
     print(mensaje)
 
 def imprimir_data(dato_a_impirimir):
+    """
+    La función "imprimir_datos" imprime el parámetro de entrada.
+    
+    :param dato_a_impirimir: Esta es una variable que representa los datos que deben imprimirse. Puede
+    ser cualquier tipo de datos, como una cadena, un número entero, un flotante o incluso una lista o un
+    diccionario. La función "imprimir_datos" toma este parámetro y lo imprime en la consola
+    """
     print(dato_a_impirimir)
 
 #7) Calcular y mostrar el jugador con la mayor cantidad de rebotes totales. 
-
-
-'''
-def calcular_mostrar_rebotes_totales(lista_jugador,primera_clave, segunda_clave)-> dict:
-    jugador_maximo = {}
-    for indice in range(len(lista_jugador)):
-        if indice == 0 or maximo < lista_jugador[indice][primera_clave][segunda_clave]:
-            maximo = lista_jugador[indice][primera_clave][segunda_clave]
-            jugador_maximo = lista_jugador[indice]
-    return jugador_maximo'''
+#8) Calcular y mostrar el jugador con el mayor porcentaje de tiros de campo. %
+#9) Calcular y mostrar el jugador con la mayor cantidad de asistencias totales.
 
 def calcular_mostrar_maximo(lista_jugadores: list[dict], clave_jugador:str, clave_valor:str)-> str:
     """
-    La función encuentra el valor máximo de una clave específica en la lista de jugadores y devuelve
-    el nombre del jugador que tiene ese valor máximo, junto con el valor mismo, en forma de cadena de texto.
+    Esta función toma una lista de diccionarios que contienen información del jugador, una clave para
+    identificar al jugador y una clave para identificar un valor para cada jugador, y devuelve un
+    mensaje que indica qué jugador tiene el valor más alto para la clave dada.
     
-    :param jugadores: una lista de diccionarios, donde cada diccionario representa a un jugador y
-    contiene su nombre y estadísticas
-    :param clave_jugador: la clave del diccionario que se utilizará para encontrar el valor máximo
-    :param clave_valor: la clave dentro de la clave anterior que se utilizará para obtener el valor específico
-    :return: una cadena de texto con el nombre del jugador que tiene el valor máximo de la clave especificada
-    y el valor máximo mismo.
+    :param lista_jugadores: Una lista de diccionarios que representan a los jugadores y sus atributos
+    :type lista_jugadores: list[dict]
+    :param clave_jugador: La clave en el diccionario para la información del jugador (por ejemplo,
+    "nombre", "edad", "equipo")
+    :type clave_jugador: str
+    :param clave_valor: El parámetro "clave_valor" es una cadena que representa la clave de un valor en
+    un diccionario que está asociado a un jugador en una lista de jugadores. Este valor se utiliza para
+    determinar el valor máximo entre todos los jugadores de la lista
+    :type clave_valor: str
+    :return: un mensaje de cadena que indica el jugador con el valor más alto para una clave determinada
+    en una lista de diccionarios de jugadores. Si la lista está vacía o hay un error, devuelve un
+    mensaje de error.
     """
+    
     nombre_maximo = None
     maximo = 0
     mensaje = "Error, no se pudo sacar maximo!"
@@ -216,18 +255,26 @@ def calcular_mostrar_maximo(lista_jugadores: list[dict], clave_jugador:str, clav
         mensaje = "El jugador {0} tiene la mayor cantidad de {1}: {2}.".format(nombre_maximo, clave_valor, maximo)
     return mensaje
 
-#8) Calcular y mostrar el jugador con el mayor porcentaje de tiros de campo. %
-
-#9) Calcular y mostrar el jugador con la mayor cantidad de asistencias totales.
-
-
 #10) Permitir al usuario ingresar un valor y mostrar los jugadores que han promediado
 #más puntos por partido que ese valor.
 #11) Permitir al usuario ingresar un valor y mostrar los jugadores que han promediado
 #más rebotes por partido que ese valor.
 #12) Permitir al usuario ingresar un valor y mostrar los jugadores que han promediado
 #más asistencias por partido que ese valor.
+#19) Calcular y mostrar el jugador con la mayor cantidad de temporadas jugadas
 def solicitar_mostrar_maximo_segun_clave(lista_jugadores, clave):
+    """
+    Esta función solicita al usuario que ingrese un valor y luego busca en una lista de estadísticas de
+    jugadores valores mayores que el valor de entrada para una tecla específica, e imprime el nombre del
+    jugador y la estadística correspondiente.
+    
+    :param lista_jugadores: una lista de diccionarios que contienen información sobre los jugadores y
+    sus estadísticas
+    :param clave: El parámetro "clave" es una cadena que representa la clave o atributo de las
+    estadísticas del jugador que la función usará para comparar con el valor ingresado por el usuario.
+    Se normaliza reemplazando los guiones bajos con espacios para que sea más legible en el mensaje de
+    salida
+    """
     valor_ingresado = input("Ingrese el valor que desea buscar: ")
 
     if re.match("^[0-9]{1,2}$", valor_ingresado): 
@@ -245,6 +292,12 @@ def solicitar_mostrar_maximo_segun_clave(lista_jugadores, clave):
 #17 Calcular y mostrar el jugador con la mayor cantidad de logros obtenidos
 
 def maxima_cantidad_logros(lista_jugadores):
+    """
+    Esta función encuentra al jugador con el mayor número de logros en una lista de jugadores.
+    
+    :param lista_jugadores: una lista de diccionarios, donde cada diccionario representa a un jugador y
+    contiene su nombre y una lista de los logros que ha obtenido
+    """
     valor_maximo = 0
 
     for jugador in lista_jugadores:
@@ -258,6 +311,20 @@ def maxima_cantidad_logros(lista_jugadores):
 # 16 - Calcular y mostrar el promedio de puntos por partido del equipo 
 # excluyendo al jugador con la menor cantidad de puntos por partido.
 def calcular_promedio(jugadores:list, primera_clave:str, segunda_clave:str)-> float:
+    """
+    Esta función calcula el promedio de un valor específico en una lista de diccionarios.
+    
+    :param jugadores: una lista de diccionarios que representan a los jugadores y sus estadísticas
+    :type jugadores: list
+    :param primera_clave: La primera tecla para acceder al diccionario de cada jugador de la lista
+    :type primera_clave: str
+    :param segunda_clave: La segunda clave o atributo del diccionario que está anidado dentro de la
+    lista de jugadores
+    :type segunda_clave: str
+    :return: un valor flotante, que es el promedio de un valor específico (determinado por la segunda
+    clave) en una lista de diccionarios (determinado por la primera clave). Si la lista está vacía,
+    devuelve Ninguno.
+    """
     if jugadores: # no sea vacia
         acumulador = 0
         contador = 0
@@ -271,9 +338,27 @@ def calcular_promedio(jugadores:list, primera_clave:str, segunda_clave:str)-> fl
 
 def ordenar_por_clave_doble(lista: list, primera_clave: str, segunda_clave: str, flag_orden: bool) -> list:
     """
-    La función ordena una lista de diccionarios por una clave específica en orden ascendente o
+    La función ordena una lista de diccionarios por una clave doble, ya sea en orden ascendente o
     descendente.
+    
+    :param lista: Una lista de diccionarios que se ordenarán según los valores de sus claves
+    :type lista: list
+    :param primera_clave: La primera clave para ordenar la lista. Debe ser una cadena que represente el
+    nombre de la clave en los diccionarios dentro de la lista
+    :type primera_clave: str
+    :param segunda_clave: El parámetro "segunda_clave" es una cadena que representa la segunda clave o
+    atributo que se utilizará para ordenar la lista de diccionarios en la función
+    "ordenar_por_clave_doble". Se usa en conjunto con el parámetro "primera_clave" para ordenar la lista
+    de diccionarios
+    :type segunda_clave: str
+    :param flag_orden: Un indicador booleano que determina si la lista debe ordenarse en orden
+    ascendente o descendente en función de los valores de las claves especificadas
+    :type flag_orden: bool
+    :return: La función `ordenar_por_clave_doble` devuelve una lista ordenada basada en dos claves
+    (`primera_clave` y `segunda_clave`) y una bandera (`flag_orden`) que determina si la ordenación debe
+    ser ascendente o descendente.
     """
+    
     lista_nueva = lista[:]
     rango_a = len(lista) -1 
     flag_swap = True
@@ -289,6 +374,10 @@ def ordenar_por_clave_doble(lista: list, primera_clave: str, segunda_clave: str,
     return lista_nueva
 
 def calcular_mostrar_clave_segun_jugador():
+    """
+    Esta función calcula y muestra el promedio de puntos por juego para una lista de jugadores,
+    excluyendo al jugador con el promedio más bajo.
+    """
     lista_ordenada = ordenar_por_clave_doble(lista_jugador, "estadisticas", "promedio_puntos_por_partido", True)
     del lista_ordenada[0]
     promedio = calcular_promedio(lista_ordenada,"estadisticas" ,"promedio_puntos_por_partido")
@@ -299,8 +388,6 @@ def calcular_mostrar_clave_segun_jugador():
         valor_encontrado = jugador["estadisticas"]["promedio_puntos_por_partido"]
         mensaje = f"{nombre_jugador}: {valor_encontrado}"
         imprimir_data(mensaje)
-
-#19) Calcular y mostrar el jugador con la mayor cantidad de temporadas jugadas
 
 #20
 def validar_opcion_expresion(expresion: str, ingreso_teclado: str) -> int:
@@ -408,11 +495,20 @@ def menu():
             case 2:
                 seleccionar_jugador_por_indice(lista_jugador)
             case 3:
+                # El código selecciona un jugador basado en un índice de una lista de jugadores, luego
+                # guarda los datos del jugador seleccionado en un archivo CSV ubicado en
+                # "Parcial\data.csv". La función utilizada para guardar los datos en el archivo no se
+                # muestra en el fragmento de código.
                 ruta_archivo = "Parcial\data.csv" # jugador_indice_estadistica.csv
                 selec_indic = seleccionar_jugador_por_indice(lista_jugador)
                 datos_para_guardar = selec_indic
                 guardar_archivo(ruta_archivo, datos_para_guardar)
             case 4:
+                # El código llama a una función "show_players" con un parámetro "player_list" y
+                # almacena el valor devuelto en una variable "opción". Luego imprime el valor de
+                # "opción" Luego llama a una función "login_name()" y almacena el valor devuelto en
+                # una variable "names_to_choose". Finalmente, llama a una función "name_achievements"
+                # con los parámetros "names_to_choose" y "player_list".
                 opcion = mostrar_jugadores(lista_jugador)
                 print(opcion)
                 nombres_a_elegir = ingrese_name()
