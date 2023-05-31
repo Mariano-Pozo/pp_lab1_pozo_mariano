@@ -263,7 +263,7 @@ def calcular_mostrar_maximo(lista_jugadores: list[dict], clave_jugador:str, clav
 #12) Permitir al usuario ingresar un valor y mostrar los jugadores que han promediado
 #más asistencias por partido que ese valor.
 #19) Calcular y mostrar el jugador con la mayor cantidad de temporadas jugadas
-def solicitar_mostrar_maximo_segun_clave(lista_jugadores, clave):
+def solicitar_mostrar_maximo_segun_clave(lista_jugadores:dict, clave: str):
     """
     Esta función solicita al usuario que ingrese un valor y luego busca en una lista de estadísticas de
     jugadores valores mayores que el valor de entrada para una tecla específica, e imprime el nombre del
@@ -635,14 +635,48 @@ def contar_posicion(lista_jugadores)-> None:
     print("Alero: {0}".format(contador_alero))
     print("Pivot: {0}".format(contador_pivot))
 
-   
-            
+#26
+
+def calcular_maximo(lista_jugadores:list, primera_clave:str):
+    """
+    Recibe una lista de diccionarios, y dos claves.
+    Busca el valor máximo según las claves especificadas en la lista.
+    Devuelve el diccionario del jugador máximo.
+    """
+    valor_maximo = 0
+    jugador_maximo = None
+
+    for jugador in lista_jugadores:
+        valor = jugador["estadisticas"].get(primera_clave, 0)
+        if valor > valor_maximo:
+            valor_maximo = valor
+            jugador_maximo = jugador
+
+    return jugador_maximo
+
+def maximo_segun_estadisticas(lista_jugadores:list) -> str:
+
+    mensaje = ""
+    for jugador in lista_jugadores:
+        for clave in jugador["estadisticas"]:
+            max_estadisticas = calcular_maximo(lista_jugadores, clave)
+            nombre_max_estadisticas = max_estadisticas["nombre"]
+            valor_max_estadisticas = max_estadisticas["estadisticas"][clave]
+            mensaje += f"{clave}: {nombre_max_estadisticas} - {valor_max_estadisticas}\n"
+
+        if clave == "porcentaje_tiros_triples":
+            break
+
+    return mensaje
+
 
 #27 e 4
+
+
 def encontrar_mejor_jugador_mejor_estadistica(lista_jugadores:list[dict])-> None:
     """
     Esta función encuentra al jugador con las mejores estadísticas generales de una lista de jugadores.
-    
+
     :param lista_jugadores: una lista de diccionarios que representan a los jugadores y sus
     estadísticas. Cada diccionario debe tener las siguientes claves: "nombre" (nombre del jugador,
     cadena), "estadisticas" (estadísticas del jugador, diccionario con claves como nombres de
@@ -658,15 +692,16 @@ def encontrar_mejor_jugador_mejor_estadistica(lista_jugadores:list[dict])-> None
             estadistica_total = 0
             for estadistica in jugador["estadisticas"].values():
                 estadistica_total += estadistica
-            if max_jugador is None or estadistica_total > max_puntaje:
-                max_jugador = jugador
-    
-        print("jugador tiene las mejores estadísticas :{0}".format(max_jugador["nombre"]))
+                if max_jugador is None or estadistica_total > max_puntaje:
+                    max_jugador = jugador
+        print("jugador tiene las mejores estadísticas :{0} con la suma total de : {1}".format(max_jugador["nombre"] , estadistica_total))
     else:
-        print("Eror, lista vacia!")
+        print("Error, lista vacia!")
 
 
-
+'''def validar_opcion():
+    opcion = input("ingrese opcion: ")'''
+    
 
 def menu():
 
@@ -772,18 +807,29 @@ def menu():
             case 25:
                 pass
             case 26:
-                max_temporadas = calcular_mostrar_maximo(lista_jugador, "estadisticas", "temporadas")
-                max_puntos_totales = calcular_mostrar_maximo(lista_jugador, "estadisticas", "puntos_totales")
-                max_promedio_puntos = calcular_mostrar_maximo(lista_jugador, "estadisticas", "promedio_puntos_por_partido")
-                max_rebotes_totales = calcular_mostrar_maximo(lista_jugador, "estadisticas", "rebotes_totales")
-                max_promedio_rebotes = calcular_mostrar_maximo(lista_jugador, "estadisticas", "promedio_rebotes_por_partido")
-                max_asistencias_totales = calcular_mostrar_maximo(lista_jugador, "estadisticas", "asistencias_totales")
-                max_promedio_asistencias = calcular_mostrar_maximo(lista_jugador, "estadisticas", "promedio_asistencias_por_partido")
-                max_robos_totales = calcular_mostrar_maximo(lista_jugador, "estadisticas", "robos_totales")
-                max_bloqueos_totales = calcular_mostrar_maximo(lista_jugador, "estadisticas", "bloqueos_totales")
-                max_porcentaje_tiros_campo = calcular_mostrar_maximo(lista_jugador, "estadisticas", "porcentaje_tiros_de_campo")
-                max_porcentaje_tiros_libres = calcular_mostrar_maximo(lista_jugador, "estadisticas", "porcentaje_tiros_libres")
-                max_porcentaje_tiros_triples = calcular_mostrar_maximo(lista_jugador, "estadisticas", "porcentaje_tiros_triples")
+                '''estadisticas = "estadisticas"
+                claves = []
+                mensaje = ""
+                for estadistica in lista_jugador:
+                    claves.append(estadistica[estadisticas])
+                    for clave in len(range(claves)):
+                        max_valor = calcular_mostrar_maximo(estadistica, "estadisticas", clave)
+                        mensaje += solicitar_mostrar_maximo_segun_clave(max_valor, clave)
+
+                return print(mensaje)     '''   
+
+                '''max_temporadas = calcular_mostrar_maximo(lista_jugador, estadisticas, "temporadas")
+                max_puntos_totales = calcular_mostrar_maximo(lista_jugador, estadisticas, "puntos_totales")
+                max_promedio_puntos = calcular_mostrar_maximo(lista_jugador, estadisticas, "promedio_puntos_por_partido")
+                max_rebotes_totales = calcular_mostrar_maximo(lista_jugador, estadisticas, "rebotes_totales")
+                max_promedio_rebotes = calcular_mostrar_maximo(lista_jugador, estadisticas, "promedio_rebotes_por_partido")
+                max_asistencias_totales = calcular_mostrar_maximo(lista_jugador, estadisticas, "asistencias_totales")
+                max_promedio_asistencias = calcular_mostrar_maximo(lista_jugador, estadisticas, "promedio_asistencias_por_partido")
+                max_robos_totales = calcular_mostrar_maximo(lista_jugador, estadisticas, "robos_totales")
+                max_bloqueos_totales = calcular_mostrar_maximo(lista_jugador, estadisticas, "bloqueos_totales")
+                max_porcentaje_tiros_campo = calcular_mostrar_maximo(lista_jugador, estadisticas, "porcentaje_tiros_de_campo")
+                max_porcentaje_tiros_libres = calcular_mostrar_maximo(lista_jugador, estadisticas, "porcentaje_tiros_libres")
+                max_porcentaje_tiros_triples = calcular_mostrar_maximo(lista_jugador, estadisticas, "porcentaje_tiros_triples")
                 solicitar_mostrar_maximo_segun_clave(max_temporadas, "temporadas")
                 solicitar_mostrar_maximo_segun_clave(max_porcentaje_tiros_campo, "porcentaje_tiros_de_campo")
                 solicitar_mostrar_maximo_segun_clave(max_puntos_totales, "puntos_totales")
@@ -796,10 +842,12 @@ def menu():
                 solicitar_mostrar_maximo_segun_clave(max_bloqueos_totales, "bloqueos_totales")
                 solicitar_mostrar_maximo_segun_clave(max_porcentaje_tiros_campo, "porcentaje_tiros_de_campo")
                 solicitar_mostrar_maximo_segun_clave(max_porcentaje_tiros_libres, "porcentaje_tiros_libres")
-                solicitar_mostrar_maximo_segun_clave(max_porcentaje_tiros_triples, "porcentaje_tiros_triples")#corregir error
+                solicitar_mostrar_maximo_segun_clave(max_porcentaje_tiros_triples, "porcentaje_tiros_triples")'''#corregir error str
             case 27:
                 encontrar_mejor_jugador_mejor_estadistica(lista_jugador)
-
+            case _:
+                print( "Esa opcion no esta en el menu" )
+                
         clear_console()
 
 menu()
