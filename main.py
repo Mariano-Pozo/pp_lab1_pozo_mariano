@@ -461,7 +461,7 @@ def ordenados_posicion_cancha(lista_jugadores: list[dict])-> None:
       
         print("{0}, {1} porcentaje tiros decampo: {2}".format(posicion, nombre, porcentaje_tiros_de_campo))
 
-#asd
+#asdd
 
 def obtener_jugadores_con_estadisticas_ordenadas(lista_jugadores:list[dict])-> list[dict]:
     """
