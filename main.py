@@ -2,6 +2,7 @@
 import re
 import json
 import os
+import csv
 
 
 def clear_console() -> None:
@@ -12,7 +13,7 @@ def clear_console() -> None:
     _ = input('Press a key to continue...')
     os.system('cls')
 
-with open('Parcial\dt.json') as archivo:
+with open('C:\\Users\\Inoue\\Desktop\\carpet\\Programacion_I\\Parcial\\dt.json') as archivo:
     data_nba = json.load(archivo)
           
 lista_jugador = data_nba["jugadores"]
@@ -460,6 +461,213 @@ def ordenados_posicion_cancha(lista_jugadores: list[dict])-> None:
       
         print("{0}, {1} porcentaje tiros decampo: {2}".format(posicion, nombre, porcentaje_tiros_de_campo))
 
+#asd
+
+def obtener_jugadores_con_estadisticas_ordenadas(lista_jugadores:list[dict])-> list[dict]:
+    """
+    Esta función toma una lista de diccionarios que representan a los jugadores de baloncesto y sus
+    estadísticas, ordena a los jugadores por diferentes estadísticas y devuelve una nueva lista de
+    diccionarios con los nombres de los jugadores y sus clasificaciones en cada estadística.
+    
+    :param lista_jugadores: Una lista de diccionarios que representan a los jugadores de baloncesto y
+    sus estadísticas
+    :type lista_jugadores: list[dict]
+    :return: una lista de diccionarios con las estadísticas modificadas de los jugadores, donde cada
+    diccionario contiene el nombre del jugador y sus estadísticas actualizadas para cada categoría
+    (rebotes, asistencias, robos y puntos).
+    """
+    
+    lista_copia = lista_jugadores[:]
+
+    lista_estadisticas = ["rebotes_totales", "asistencias_totales", "robos_totales", "puntos_totales"]
+    for estadistaca in lista_estadisticas:
+        lista_ordenada = ordenar_por_clave_doble(lista_copia,"estadisticas" ,estadistaca , False)
+        jugadores_con_estadisticas = []
+
+        for i in range(len(lista_ordenada)):
+            jugador = lista_ordenada[i]
+            nombre = jugador["nombre"]
+            jugador["estadisticas"][estadistaca] = i + 1
+            jugador_modificado = {
+                "nombre": nombre,
+                "estadisticas": jugador["estadisticas"]
+            }
+            jugadores_con_estadisticas.append(jugador_modificado)
+
+
+    return jugadores_con_estadisticas
+def guardar_archivo_csv(nombre_archivo: str, contenido: str) -> bool:
+    """
+    Esta función guarda el contenido de una cadena en un archivo con el nombre de archivo dado y
+    devuelve un valor booleano que indica si la operación fue exitosa o no.
+
+    Parametros: 
+        -nombre_archivo: Una cadena que representa el nombre del archivo que se va a crear o
+        sobrescribir
+
+        -contenido: El contenido que se escribirá en el archivo. Debería ser una cadena
+
+    :retorno: 
+        -un valor booleano, ya sea True o False, según si el archivo se creó correctamente o no.
+    """
+ 
+    with open(nombre_archivo, 'w') as archivo:
+        resultado = None 
+        resultado = archivo.write(contenido)
+    if resultado:
+        print("Se creó el archivo: {0}".format(nombre_archivo))
+        return True
+
+    print("Error al crear el archivo: {0}".format(nombre_archivo))
+    return False
+
+def generar_texto(data:list[dict] or dict)->str:
+
+    """
+    La función genera una representación de texto de los datos del jugador de baloncesto en formato de
+    lista o de diccionario.
+    
+    :param data: Los datos de entrada que pueden ser un diccionario o una lista de diccionarios que
+    contienen información sobre los jugadores de baloncesto y sus estadísticas
+    :return: La función `generar_texto` devuelve una cadena que contiene datos en un formato específico.
+    El formato depende del tipo de `datos` de entrada. Si `data` es una lista de diccionarios, la
+    función devuelve una cadena con valores separados por comas para cada diccionario de la lista. Si
+    `data` es un diccionario, la función devuelve una cadena con valores separados por comas para las
+    claves y valores en el diccionario
+    """
+
+    if isinstance(data, list):
+        lista_claves = ["nombre", "asistencias totales", "puntos_totales", "rebotes_totales", "robos_totales"]
+        filas = []
+
+        for jugador in data:
+            valores = [str(jugador["nombre"]),
+                       str(jugador["estadisticas"]["asistencias_totales"]),
+                       str(jugador["estadisticas"]["puntos_totales"]),
+                       str(jugador["estadisticas"]["rebotes_totales"]),
+                       str(jugador["estadisticas"]["robos_totales"])]
+            fila = ",".join(valores)
+            filas.append(fila)
+
+        claves_str = ",".join(lista_claves)
+        datos = "{0}\n{1}".format(claves_str, "\n".join(filas))
+
+        return datos
+
+    elif isinstance(data, dict):
+        lista_claves = ["nombre", "posicion"]
+        lista_valores = []
+
+        jugador_estadisticas = data["estadisticas"]
+        nombre_posicion = "{0}, {1}".format(data["nombre"], data["posicion"])
+
+        for clave, valor in jugador_estadisticas.items():
+            lista_claves.append(clave)
+            lista_valores.append(str(valor))
+
+        claves_str = ",".join(lista_claves)
+        valores_str = ",".join(lista_valores)
+
+        datos_str = "{0}\n{1},{2}".format(claves_str, nombre_posicion, valores_str)
+        return datos_str
+
+    else:
+        return False
+
+def imprimir_guarda_tabla_jugadores(lista_jugadores: list[dict])-> None:
+
+    """
+    Esta función imprime una tabla de estadísticas de jugadores y la guarda en un archivo CSV.
+    
+    :param lista_jugadores: Una lista de diccionarios que representan a los jugadores de baloncesto y
+    sus estadísticas. Cada diccionario contiene las claves "nombre" y "estadisticas" que es otro
+    diccionario que contiene las claves "puntos_totales" (total de puntos), "rebotes_totales" (total de
+    rebotes), "
+    :type lista_jugadores: list[dict]
+    """
+
+    print("---------------------------------------------------------------------------")
+    print("|     Jugador          |    Puntos  |   Rebotes |  Asistencias  |  Robos  |")
+    print("---------------------------------------------------------------------------")
+    for jugador in lista_jugadores:
+        print("|  {:19s} | {:^10d} | {:^9d} | {:^13d} | {:^7d} |".format(
+            jugador["nombre"],
+            jugador["estadisticas"]["puntos_totales"],
+            jugador["estadisticas"]["rebotes_totales"],
+            jugador["estadisticas"]["asistencias_totales"],
+            jugador["estadisticas"]["robos_totales"])
+        )
+    print("---------------------------------------------------------------------------")
+
+
+# asd1
+
+def contar_posicion(lista_jugadores)-> None:
+    """
+    La función cuenta el número de jugadores en un equipo de baloncesto por su posición e imprime los
+    resultados.
+    
+    :param lista_jugadores: una lista de diccionarios que representan a jugadores de baloncesto, donde
+    cada diccionario contiene información sobre un jugador, como su nombre, edad, altura, peso y
+    posición. La función cuenta el número de jugadores en cada categoría de posición e imprime los
+    resultados
+    """
+
+    contador_escolta = 0
+    contador_base = 0
+    contador_ala_pivot = 0
+    contador_alero = 0
+    contador_pivot = 0 
+    for jugador in lista_jugadores:
+        if jugador["posicion"] == "Escolta":
+            contador_escolta += 1
+        elif jugador["posicion"] == "Base":
+            contador_base += 1
+        elif jugador["posicion"] == "Ala-Pivot":
+            contador_ala_pivot += 1
+        elif jugador["posicion"] == "Alero":
+            contador_alero += 1
+        elif jugador["posicion"] == "Pivot":
+            contador_pivot += 1
+    print("Escolta: {0}".format(contador_escolta))
+    print("Base: {0}".format(contador_base))
+    print("Ala-Pivot: {0}".format(contador_ala_pivot))
+    print("Alero: {0}".format(contador_alero))
+    print("Pivot: {0}".format(contador_pivot))
+
+   
+            
+
+#27 e 4
+def encontrar_mejor_jugador_mejor_estadistica(lista_jugadores:list[dict])-> None:
+    """
+    Esta función encuentra al jugador con las mejores estadísticas generales de una lista de jugadores.
+    
+    :param lista_jugadores: una lista de diccionarios que representan a los jugadores y sus
+    estadísticas. Cada diccionario debe tener las siguientes claves: "nombre" (nombre del jugador,
+    cadena), "estadisticas" (estadísticas del jugador, diccionario con claves como nombres de
+    estadísticas y valores como valores de estadísticas, int)
+    :type lista_jugadores: list[dict]
+    """
+
+    if lista_jugadores:
+        max_jugador = None
+        max_puntaje = 0
+
+        for jugador in lista_jugadores:
+            estadistica_total = 0
+            for estadistica in jugador["estadisticas"].values():
+                estadistica_total += estadistica
+            if max_jugador is None or estadistica_total > max_puntaje:
+                max_jugador = jugador
+    
+        print("jugador tiene las mejores estadísticas :{0}".format(max_jugador["nombre"]))
+    else:
+        print("Eror, lista vacia!")
+
+
+
+
 def menu():
 
     while True:
@@ -554,7 +762,44 @@ def menu():
             case 21:
                 break #exit
             case 23:
-                break #bonus
+                jugadores_con_estadisticas = obtener_jugadores_con_estadisticas_ordenadas(lista_jugador)
+                nombre_archivo = "estadisticas_jugadores.csv"
+                texto_generado = generar_texto(jugadores_con_estadisticas)
+                guardar_archivo_csv(nombre_archivo, texto_generado)
+                imprimir_guarda_tabla_jugadores(jugadores_con_estadisticas)
+            case 24:
+                contar_posicion(lista_jugador)
+            case 25:
+                pass
+            case 26:
+                max_temporadas = calcular_mostrar_maximo(lista_jugador, "estadisticas", "temporadas")
+                max_puntos_totales = calcular_mostrar_maximo(lista_jugador, "estadisticas", "puntos_totales")
+                max_promedio_puntos = calcular_mostrar_maximo(lista_jugador, "estadisticas", "promedio_puntos_por_partido")
+                max_rebotes_totales = calcular_mostrar_maximo(lista_jugador, "estadisticas", "rebotes_totales")
+                max_promedio_rebotes = calcular_mostrar_maximo(lista_jugador, "estadisticas", "promedio_rebotes_por_partido")
+                max_asistencias_totales = calcular_mostrar_maximo(lista_jugador, "estadisticas", "asistencias_totales")
+                max_promedio_asistencias = calcular_mostrar_maximo(lista_jugador, "estadisticas", "promedio_asistencias_por_partido")
+                max_robos_totales = calcular_mostrar_maximo(lista_jugador, "estadisticas", "robos_totales")
+                max_bloqueos_totales = calcular_mostrar_maximo(lista_jugador, "estadisticas", "bloqueos_totales")
+                max_porcentaje_tiros_campo = calcular_mostrar_maximo(lista_jugador, "estadisticas", "porcentaje_tiros_de_campo")
+                max_porcentaje_tiros_libres = calcular_mostrar_maximo(lista_jugador, "estadisticas", "porcentaje_tiros_libres")
+                max_porcentaje_tiros_triples = calcular_mostrar_maximo(lista_jugador, "estadisticas", "porcentaje_tiros_triples")
+                solicitar_mostrar_maximo_segun_clave(max_temporadas, "temporadas")
+                solicitar_mostrar_maximo_segun_clave(max_porcentaje_tiros_campo, "porcentaje_tiros_de_campo")
+                solicitar_mostrar_maximo_segun_clave(max_puntos_totales, "puntos_totales")
+                solicitar_mostrar_maximo_segun_clave(max_promedio_puntos, "promedio_puntos_por_partido")
+                solicitar_mostrar_maximo_segun_clave(max_rebotes_totales, "rebotes_totales")
+                solicitar_mostrar_maximo_segun_clave(max_promedio_rebotes, "promedio_rebotes_por_partido")
+                solicitar_mostrar_maximo_segun_clave(max_asistencias_totales, "asistencias_totales")
+                solicitar_mostrar_maximo_segun_clave(max_promedio_asistencias, "promedio_asistencias_por_partido")
+                solicitar_mostrar_maximo_segun_clave(max_robos_totales, "robos_totales")
+                solicitar_mostrar_maximo_segun_clave(max_bloqueos_totales, "bloqueos_totales")
+                solicitar_mostrar_maximo_segun_clave(max_porcentaje_tiros_campo, "porcentaje_tiros_de_campo")
+                solicitar_mostrar_maximo_segun_clave(max_porcentaje_tiros_libres, "porcentaje_tiros_libres")
+                solicitar_mostrar_maximo_segun_clave(max_porcentaje_tiros_triples, "porcentaje_tiros_triples")#corregir error
+            case 27:
+                encontrar_mejor_jugador_mejor_estadistica(lista_jugador)
+
         clear_console()
 
 menu()
